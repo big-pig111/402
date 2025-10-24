@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
 
     const x402Body = {
       x402Version: 1,
-      error: {},
+      error: "",
       accepts: [
         {
           scheme: 'exact',
