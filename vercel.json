@@ -1,8 +1,5 @@
 {
   "version": 2,
-  "functions": {
-    "api/submit-x402.js": { "regions": ["sfo1", "iad1", "hnd1"] }
-  },
   "routes": [
     { "src": "^/mint$", "dest": "/api/mint" },
     { "src": "^/mint-v2$", "dest": "/api/mint-v2" },
