@@ -1,0 +1,25 @@
+{
+  "name": "402dog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "dev": "node server/index.js",
+    "deploy:contract:base": "hardhat run scripts/deploy.js --network base",
+    "deploy:contract:base-sepolia": "hardhat run scripts/deploy.js --network base_sepolia",
+    "grant:minter:base": "hardhat run scripts/grant-minter.js --network base",
+    "grant:minter:base-sepolia": "hardhat run scripts/grant-minter.js --network base_sepolia",
+    "submit:x402scan": "node submit-to-x402scan.js"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.2",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.2",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.11"
+  }
+}
