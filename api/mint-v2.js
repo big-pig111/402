@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
     const iface = new ethers.Interface(['function mint(address to)']);
     const data = iface.encodeFunctionData('mint', [userAddress]);
 
-    const resourceUrl = `${PUBLIC_URL.replace(/\/$/, '')}/mint-v2`;
+    const resourceUrl = `${PUBLIC_URL.replace(/\/$/, '')}/api/mint-v2`;
 
     const payment = {
       chainId: 8453,
@@ -26,14 +26,12 @@ module.exports = async (req, res) => {
       amount: '50000',
       to: SELLER,
       resource: resourceUrl,
-      call: {
-        to: TOKEN,
-        data
-      }
+      call: { to: TOKEN, data }
     };
 
     const x402Body = {
       x402Version: 1,
+      error: {},
       accepts: [
         {
           scheme: 'exact',
@@ -45,7 +43,14 @@ module.exports = async (req, res) => {
           payTo: SELLER,
           maxTimeoutSeconds: 600,
           asset: payment.token,
-          extra: { call: { to: TOKEN, function: 'mint(address)', amountPerMint: '600', decimals: 18 } }
+          outputSchema: {
+            input: { type: 'http', method: 'GET', discoverable: true }
+          },
+          extra: {
+            name: 'USD Coin',
+            version: '2',
+            call: { to: TOKEN, function: 'mint(address)', amountPerMint: '600', decimals: 18 }
+          }
         }
       ]
     };
@@ -53,6 +58,9 @@ module.exports = async (req, res) => {
     res
       .status(402)
       .setHeader('Access-Control-Allow-Origin', '*')
+      .setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS')
+      .setHeader('Access-Control-Allow-Headers', 'x-user-address,content-type')
+      .setHeader('Access-Control-Expose-Headers', 'x402-payment,x402-facilitator')
       .setHeader('x402-facilitator', FACILITATOR_URL)
       .setHeader('x402-payment', JSON.stringify(payment))
       .json(x402Body);
