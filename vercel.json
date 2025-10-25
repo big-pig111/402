@@ -4,8 +4,8 @@
     { "src": "^/mint$", "dest": "/api/mint" },
     { "src": "^/mint-v2$", "dest": "/api/mint-v2" },
     { "src": "^/submit-x402$", "dest": "/api/submit-x402" },
-    { "src": "^/pay/mint.html$", "dest": "/pay/mint.html" },         // 显式映射静态页
-    { "src": "^/pay$", "dest": "/pay/mint.html" },                   // 友好路径（可选）
+    { "src": "^/pay/(.*)$", "dest": "/pay/$1" },
+    { "src": "^/pay$", "dest": "/pay/mint.html" },
     { "src": "^/$", "dest": "/index.html" }
   ]
 }
