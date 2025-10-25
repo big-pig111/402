@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
 
     const x402Body = {
       x402Version: 1,
-      error: "",
+      error: '',
       accepts: [
         {
           scheme: 'exact',
@@ -55,14 +55,24 @@ module.exports = async (req, res) => {
       ]
     };
 
+    const payStr = JSON.stringify(payment);
+
     res
       .status(402)
       .setHeader('Access-Control-Allow-Origin', '*')
       .setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS')
       .setHeader('Access-Control-Allow-Headers', 'x-user-address,content-type')
-      .setHeader('Access-Control-Expose-Headers', 'x402-payment,x402-facilitator')
+      .setHeader('Access-Control-Expose-Headers', 'x402-payment,x402-facilitator,X402-Payment,X402-Facilitator,x-402-payment,x-402-facilitator,X-402-Payment,X-402-Facilitator')
+      // facilitator variants
       .setHeader('x402-facilitator', FACILITATOR_URL)
-      .setHeader('x402-payment', JSON.stringify(payment))
+      .setHeader('X402-Facilitator', FACILITATOR_URL)
+      .setHeader('x-402-facilitator', FACILITATOR_URL)
+      .setHeader('X-402-Facilitator', FACILITATOR_URL)
+      // payment variants
+      .setHeader('x402-payment', payStr)
+      .setHeader('X402-Payment', payStr)
+      .setHeader('x-402-payment', payStr)
+      .setHeader('X-402-Payment', payStr)
       .json(x402Body);
   } catch (e) {
     console.error(e);

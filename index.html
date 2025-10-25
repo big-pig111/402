@@ -14,17 +14,50 @@
       img { width: 140px; height: 140px; }
       h1 { margin: 16px 0 6px; font-size: 32px; }
       p { margin: 0 0 18px; color: #a3b1d1; }
-      a.btn { display:inline-block; padding: 12px 18px; color:white; background: var(--blue); border-radius: 10px; text-decoration:none; border:1px solid #4d6fff; }
+      a.btn, button.btn { display:inline-block; padding: 12px 18px; color:white; background: var(--blue); border-radius: 10px; text-decoration:none; border:1px solid #4d6fff; cursor:pointer; }
       .muted { font-size: 12px; color: #7c8bad; margin-top: 12px; }
+      .row { display:flex; gap:10px; justify-content:center; margin-top:12px; flex-wrap:wrap; }
     </style>
   </head>
   <body>
     <main class="card">
       <img src="/402dog.svg" alt="402dog logo" />
       <h1>402DOG</h1>
-      <p>Pay 0.01 USDC to mint 100 402DOG on Base</p>
-      <a class="btn" href="/mint">Mint with x402 Wallet</a>
+      <p>Pay 0.01–0.05 USDC to mint 402DOG on Base</p>
+      <div class="row">
+        <button id="mint100" class="btn">Mint 100 402DOG (0.01 USDC)</button>
+        <button id="mint600" class="btn">Mint 600 402DOG (0.05 USDC)</button>
+      </div>
       <div class="muted">Make sure your wallet supports x402 (402 Payment Required)</div>
     </main>
+    <script>
+      async function connect() {
+        if (window.ethereum?.request) {
+          try {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            return accounts?.[0] || '';
+          } catch (e) { return ''; }
+        }
+        return '';
+      }
+      async function trigger(path) {
+        const addr = await connect();
+        // 优先尝试 fetch 方式（部分钱包能拦截 fetch 的 402）
+        try {
+          const r = await fetch(`/api/${path}`, { headers: { 'x-user-address': addr }, cache: 'no-store', mode: 'cors' });
+          if (r.status === 402) {
+            // 对于仅拦截顶层 402 的钱包，回退到顶层跳转
+            window.location.href = `/${path}?address=${addr}`;
+            return;
+          }
+        } catch (_) {
+          window.location.href = `/${path}?address=${addr}`;
+          return;
+        }
+        window.location.href = `/${path}?address=${addr}`;
+      }
+      document.getElementById('mint100')?.addEventListener('click', () => trigger('mint'));
+      document.getElementById('mint600')?.addEventListener('click', () => trigger('mint-v2'));
+    </script>
   </body>
 </html>
