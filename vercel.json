@@ -4,8 +4,8 @@
     { "src": "^/mint$", "dest": "/api/mint" },
     { "src": "^/mint-v2$", "dest": "/api/mint-v2" },
     { "src": "^/submit-x402$", "dest": "/api/submit-x402" },
-    { "src": "^/pay/(.*)$", "dest": "/pay/$1" },
-    { "src": "^/pay$", "dest": "/pay/mint.html" },
+    { "src": "^/pay$", "dest": "/mint.html" },
+    { "src": "^/mint.html$", "dest": "/mint.html" },
     { "src": "^/$", "dest": "/index.html" }
   ]
 }
